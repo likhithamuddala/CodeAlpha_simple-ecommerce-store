@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f9f9f9;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+
+        .cart-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        h3 {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .btn-checkout {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-continue {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Top left buttons */
+        .top-buttons {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .top-buttons a {
+            text-decoration: none;
+            background-color: #007bff;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .top-buttons a:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 4px;
+            background-color: rgba(0, 0, 0, 0);
+            color: #0f0d0d;
+            font-size: 14px;
+            position: absolute;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ✅ Top Left Navigation Buttons -->
+<div class="top-buttons">
+    <a href="{% url 'home' %}">Home</a>
+    <a href="{% url 'product_list' %}">View Products</a>
+    <a href="{% url 'order_list' %}">Orders</a>
+</div>
+
+<div class="cart-container">
+    <h1>Your Shopping Cart</h1>
+
+    {% if items %}
+        <ul>
+            {% for item in items %}
+                <li>
+                    {{ item.product.name }} - ₹{{ item.product.price }} × {{ item.quantity }} =
+                    ₹{{ item.get_total_price }}
+                    <form method="POST" action="{% url 'remove_from_cart' item.product.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <h3>Total: ₹{{ total }}</h3>
+
+        <form id="checkout-form" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-checkout">Confirm order</button>
+        </form>
+
+        <!-- ✅ Continue Shopping button after Checkout -->
+        <a href="{% url 'product_list' %}" class="btn btn-secondary btn-continue">Continue Shopping</a>
+
+    {% else %}
+        <p class="text-center">Your cart is empty.</p>
+        <a href="{% url 'product_list' %}" class="btn btn-secondary btn-continue">Continue Shopping</a>
+    {% endif %}
+</div>
+
+<script>
+document.getElementById('checkout-form')?.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    fetch("{% url 'checkout_api' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            cart: {
+                {% for item in items %}
+                    "{{ item.product.id }}": {{ item.quantity }}{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            }
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("Order placed! Order ID: " + data.order_id);
+        window.location.href = "{% url 'product_list' %}";
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+</script>
+<!-- Footer -->
+    <footer>
+        &copy; <span id="year"></span> ShipShop Store. All rights reserved.
+    </footer>
+
+    <!-- JavaScript to set current year -->
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
