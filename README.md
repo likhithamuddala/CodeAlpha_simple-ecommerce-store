@@ -20,7 +20,19 @@ This is a Django-based web application for a simple e-commerce store. It include
 
 ## 🖥️ Screenshots
 
-(Add screenshots of your home page, login, product page, and cart here)
+
+### Homepage
+![Homepage](homepage.png)
+
+### Cart Page
+![Cart](cart.png)
+
+### Login Page
+![Login](login.png)
+
+### Products page
+![Products](Products.png)
+
 
 ## 📦 Installation
 
