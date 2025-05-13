@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'dkub%m+(xe=dq5bt91yvx%u4!2i__zc&c4z+&1i1zvxpa+il=e'
 
 DEBUG = True
-ALLOWED_HOSTS = ['shipshop-store.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
