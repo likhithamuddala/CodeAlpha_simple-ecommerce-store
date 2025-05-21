@@ -18,22 +18,6 @@ This is a Django-based web application for a simple e-commerce store. It include
 - **Database:** SQLite (default with Django)
 - **Version Control:** Git & GitHub
 
-## 🖥️ Screenshots
-
-
-### Homepage
-![Homepage](homepage.png)
-
-### Cart Page
-![Cart](cart.png)
-
-### Login Page
-![Login](login.png)
-
-### Products page
-![Products](Products.png)
-
-
 ## 📦 Installation
 
 ```bash
