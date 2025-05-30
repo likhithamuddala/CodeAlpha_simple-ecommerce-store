@@ -22,7 +22,7 @@ This is a Django-based web application for a simple e-commerce store. It include
 
 ```bash
 # Clone the repo
-git clone https://github.com/likhithamuddala/simple-ecommerce-store.git
+git clone https://github.com/likhithamuddala/CodeAlpha_simple-ecommerce-store.git
 
 # Navigate into the project
 cd simple-ecommerce-store/ecommerce
